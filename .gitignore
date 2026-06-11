@@ -11,6 +11,9 @@ dist/
 # Environment
 .env
 
+# Virtual environment
+.venv/
+
 # Docker
 *.log
 
