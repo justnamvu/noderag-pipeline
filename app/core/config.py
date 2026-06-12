@@ -1,4 +1,7 @@
-from pydantic_settings import BaseSettings # Pydantic-settings reads environment variables from .env file and validates them as typed Python objects
+from pydantic_settings import (
+    BaseSettings,
+)  # Pydantic-settings reads environment variables from .env file and validates them as typed Python objects
+
 
 class Settings(BaseSettings):
     app_name: str = "NodeRAG"
@@ -13,5 +16,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+
 
 settings = Settings()
