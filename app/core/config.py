@@ -12,10 +12,11 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_model_name: str = ""
     max_file_size_mb: int = 10
-    allowed_file_types: str = "pdf, txt, docx"
+    allowed_file_types: str = "pdf,txt,docx"
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 
 settings = Settings()
