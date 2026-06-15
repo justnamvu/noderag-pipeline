@@ -2,6 +2,7 @@ import uuid
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from app.core.config import settings
 from app.models.schemas import UploadResponse
+from app.services.parser import parse_document
 
 router = APIRouter()
 
@@ -31,11 +32,12 @@ async def upload_document(file: UploadFile = File(...)):
         )
 
     doc_id = str(uuid.uuid4())
+    raw_text = parse_document(contents, file.content_type)
 
     return UploadResponse(
         doc_id=doc_id,
         filename=file.filename,
         content_type=file.content_type,
         file_size_bytes=file_size,
-        message="File received successfully. Parsing will follow.",
+        message=f"Parse successfully. Extracted {len(raw_text)} characters.",
     )
