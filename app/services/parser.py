@@ -39,7 +39,9 @@ def parse_txt(contents: bytes) -> str:
 PARSER_MAP = {
     "application/pdf": parse_pdf,
     "text/plain": parse_txt,
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": parse_docx,
+    (
+        "application/vnd.openxmlformats-officedocument" ".wordprocessingml.document"
+    ): parse_docx,
 }
 
 

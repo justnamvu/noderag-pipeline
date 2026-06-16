@@ -1,6 +1,6 @@
 from pydantic_settings import (
     BaseSettings,
-)  # Pydantic-settings reads environment variables from .env file and validates them as typed Python objects
+)
 
 
 class Settings(BaseSettings):

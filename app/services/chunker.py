@@ -1,5 +1,6 @@
 from typing import List
 
+
 def _split_into_chunks(text: str, chunk_size: int, overlap: int) -> List[str]:
     chunks = []
     start = 0
@@ -17,13 +18,14 @@ def _split_into_chunks(text: str, chunk_size: int, overlap: int) -> List[str]:
             break
 
         start = end - overlap
-    
+
     return chunks
 
+
 def _attach_metadata(
-        chunks: List[str],
-        doc_id: str,
-        filename: str,
+    chunks: List[str],
+    doc_id: str,
+    filename: str,
 ) -> List[dict]:
     return [
         {
@@ -36,27 +38,29 @@ def _attach_metadata(
         for i, chunk in enumerate(chunks)
     ]
 
+
 def log_chunk_stats(chunks: List[dict]) -> None:
     if not chunks:
         print("No chunks provided.")
         return
-    
+
     lengths = [c["char_count"] for c in chunks]
     print(f"Chunks produced: {len(chunks)}")
     print(f"Min chunk length: {min(lengths)} chars")
     print(f"Max chunk length: {max(lengths)} chars")
     print(f"Avg chunk length: {sum(lengths) // len(lengths)} chars")
 
+
 def chunk_text(
-        text: str,
-        doc_id: str,
-        filename: str,
-        chunk_size: int = 500,
-        overlap: int = 50,
+    text: str,
+    doc_id: str,
+    filename: str,
+    chunk_size: int = 500,
+    overlap: int = 50,
 ) -> List[dict]:
     if not text.strip():
         return []
-    
+
     raw_chunks = _split_into_chunks(text, chunk_size, overlap)
     chunks = _attach_metadata(raw_chunks, doc_id, filename)
     log_chunk_stats(chunks)

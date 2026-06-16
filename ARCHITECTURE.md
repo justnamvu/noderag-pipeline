@@ -8,19 +8,19 @@
 
 
 ## Components
-- **API Gateway:**
+1. **API Gateway:**
     - The single entry point for all client requests, whether that’s a document upload or a user query
     - Handle routing, authentication, and request validation before forwarding traffic to the appropriate internal service
     - Nothing reaches the backend without passing through it first
-- **Ingestion Service:**
+2. **Ingestion Service:**
     - Responsible for receiving raw documents, parsing them into plain text, and splitting that text into overlapping chunks suitable for embedding
     - Handle all the messy pre-processing work: cleaning special characters, normalising whitespace, and producing a clean array of text chunks as output
     - Downstream services never touch raw files and only receive what the ingestion service has prepared
-- **Vector Store:**
+3. **Vector Store:**
     - The database layer that persists vector embeddings alongside their metadata (filename, page number, chunk index)
     - Expose similarity search capabilities so that at query time, the system can efficiently retrieve the top-K chunks most semantically relevant to a user’s question
     - Everything ingested lives here until explicitly deleted
-- **LLM Service:**
+4. **LLM Service:**
     - Wrap the language model and is responsible for taking a user query + the retrieved context chunks and producing a grounded natural-language answer
     - Enforce the strict prompting rules that prevent hallucination: if the answer isn’t in the provided context, it says no
     - The only component that generates text, whereas every other component moves or transforms data
@@ -29,7 +29,7 @@
 ![Architecture Diagram](./docs/architecture_diagram.png)
 
 ## Communication Schema
-- **Upload request (Client → API Gateway → Ingestion Service):**
+1. **Upload request (Client → API Gateway → Ingestion Service):**
     ``` json
     {
         "filename": "report.pdf",
@@ -37,7 +37,7 @@
         "file": "<binary stream>"
     }
     ```
-- **Ingestion Service → Vector Store (what gets stored per chunk):**
+2. **Ingestion Service → Vector Store (what gets stored per chunk):**
     ``` json
     {
         "vector": [0.012, -0.834, 0.201, "...1536 dims"],
@@ -50,7 +50,7 @@
         }
     }
     ```
-- **Query request (Client → API Gateway → LLM Service):**
+3. **Query request (Client → API Gateway → LLM Service):**
     ``` json
     {
         "query": "What was the revenue in Q3?",
@@ -60,7 +60,7 @@
         }
     }
     ```
-- **LLM Service → Vector Store (similarity search call):**
+4. **LLM Service → Vector Store (similarity search call):**
     ``` json
     {
         "query_vector": [0.045, -0.712, 0.389, "...1536 dims"],
@@ -70,7 +70,7 @@
         }
     }
     ```
-- **LLM Service → Client (final response):**
+5. **LLM Service → Client (final response):**
     ```json
     {
         "answer": "Revenue in Q3 was $4.2M, a 12% increase year on year."
@@ -84,6 +84,19 @@
         ]
     }
     ```
+
+## Ingestion Pipeline
+The upload endpoint runs the following sequence on every file:
+
+1. **Validation:** file type (MIME) and size chedk against config values
+2. **Parsing:** file bytes dispatched to the correct parser via 'PARSER_MAP' :
+    - PDF → 'docling' (exports to markdown, preserving structure)
+    - DOCX → 'python-docx' (extracts paragraphs, filters blank lines)
+    - TXT → 'bytes.decode()' with UTF-8 / Latin-1 fallback
+3. **Cleaning:** soft hyphens, non-breaking spaes, special characters, excess whitespae removed via 'clean_text()'
+4. **Chunking:** sliding window split with 'chunk_size=500', 'overlap=50'. Each chunk carries 'doc_id', 'file_name', 'chunk_index', and 'char_count' as metadata.
+
+Output: A list of chunk dictionaries ready to be passed to the Embeddings API
 
 ## Key Design Decisions
 - Schema between FastAPI and Vector DB finalised before coding begins
