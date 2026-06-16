@@ -7,6 +7,7 @@ class UploadResponse(BaseModel):  # what a successful upload returns
     content_type: str
     file_size_bytes: int
     char_count: int
+    chunk_count: int
     message: str
 
 

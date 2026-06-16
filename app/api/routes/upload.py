@@ -4,6 +4,7 @@ from app.core.config import settings
 from app.models.schemas import UploadResponse
 from app.services.parser import parse_document
 from app.services.cleaner import clean_text
+from app.services.chunker import chunk_text
 
 router = APIRouter()
 
@@ -35,6 +36,11 @@ async def upload_document(file: UploadFile = File(...)):
     doc_id = str(uuid.uuid4())
     raw_text = parse_document(contents, file.content_type)
     cleaned_text = clean_text(raw_text)
+    chunks = chunk_text(
+        text=cleaned_text,
+        doc_id=doc_id,
+        filename=file.filename,
+    )
 
     return UploadResponse(
         doc_id=doc_id,
@@ -42,5 +48,6 @@ async def upload_document(file: UploadFile = File(...)):
         content_type=file.content_type,
         file_size_bytes=file_size,
         char_count=len(cleaned_text),
-        message=f"Parsed and cleaned successfully. {len(cleaned_text)} characters ready for chunking.",
+        chunk_count=len(chunks),
+        message=f"Pipeline complete. {len(chunks)} chunks ready for embedding.",
     )
