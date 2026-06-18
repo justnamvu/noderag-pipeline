@@ -47,7 +47,6 @@ multiprocess==0.70.19
 mypy_extensions==1.1.0
 networkx==3.2.1
 numpy==2.0.2
-ocrmac==1.0.1
 omegaconf==2.3.1
 opencv-python==4.13.0.92
 openpyxl==3.1.5
@@ -68,11 +67,6 @@ pydantic_core==2.46.4
 pyflakes==3.4.0
 Pygments==2.20.0
 pylatexenc==2.10
-pyobjc-core==11.1
-pyobjc-framework-Cocoa==11.1
-pyobjc-framework-CoreML==11.1
-pyobjc-framework-Quartz==11.1
-pyobjc-framework-Vision==11.1
 pypdfium2==5.9.0
 python-dateutil==2.9.0.post0
 python-docx==1.2.0
@@ -92,6 +86,7 @@ rtree==1.4.1
 safetensors==0.7.0
 scipy==1.13.1
 semchunk==2.2.2
+setuptools==82.0.1
 shapely==2.0.7
 shellingham==1.5.4
 six==1.17.0

@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     opensearch_url: str
     opensearch_index_name: str = "noderag_vectors"
     embeddings_api_key: str = ""
+    embeddings_model: str = "text-embedding-3-small"
     llm_api_key: str = ""
     llm_model_name: str = ""
     max_file_size_mb: int = 10
