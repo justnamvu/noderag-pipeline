@@ -32,7 +32,7 @@ def _attach_metadata(
             "chunk_index": i,
             "doc_id": doc_id,
             "filename": filename,
-            "text": chunk,
+            "chunk_text": chunk,
             "char_count": len(chunk),
         }
         for i, chunk in enumerate(chunks)

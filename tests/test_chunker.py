@@ -30,12 +30,12 @@ def test_chunker(path: str, content_type: str):
     print(f"doc_id: {chunks[0]['doc_id']}")
     print(f"filename: {chunks[0]['filename']}")
     print(f"char_count: {chunks[0]['char_count']}")
-    print(f"text: {chunks[0]['text'][:200]}")
+    print(f"text: {chunks[0]['chunk_text'][:200]}")
 
     if len(chunks) > 1:
         print(f"\nOverlap check (last 50 chars of chunk 0 vs first 50 chars of chunk 1):")
-        print(f"End of chunk 0: ...{chunks[0]['text'][-50:]!r}")
-        print(f"Start of chunk 1: {chunks[1]['text'][:50]!r}...")
+        print(f"End of chunk 0: ...{chunks[0]['chunk_text'][-50:]!r}")
+        print(f"Start of chunk 1: {chunks[1]['chunk_text'][:50]!r}...")
 
 def test_edge_cases():
     print(f"\n{'-'*50}")
