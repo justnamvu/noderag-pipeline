@@ -5,6 +5,8 @@ from app.models.schemas import UploadResponse
 from app.services.parser import parse_document
 from app.services.cleaner import clean_text
 from app.services.chunker import chunk_text
+from app.services.embedder import embed_chunks
+from app.services.vector_store import store_chunks
 
 router = APIRouter()
 
@@ -42,6 +44,8 @@ async def upload_document(file: UploadFile = File(...)):
         doc_id=doc_id,
         filename=file.filename,
     )
+    embedded_chunks = embed_chunks(chunks)
+    stored_count = store_chunks(embedded_chunks)
 
     return UploadResponse(
         doc_id=doc_id,
@@ -49,6 +53,6 @@ async def upload_document(file: UploadFile = File(...)):
         content_type=file.content_type,
         file_size_bytes=file_size,
         char_count=len(cleaned_text),
-        chunk_count=len(chunks),
-        message=f"Pipeline complete. {len(chunks)} chunks ready for embedding.",
+        chunk_count=stored_count,
+        message=f"Pipeline complete. {stored_count} chunks ready in OpenSearch.",
     )
