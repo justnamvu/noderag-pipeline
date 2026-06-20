@@ -7,7 +7,7 @@ from app.services.embedder import embed_single, embed_chunks
 
 def test_single_embedding():
     print("\n--- Test 1: Single string embedding ---")
-    text = "The quarterly revenue increased significantly in Q3."
+    text = "Dave watched as the forest burned up on the hill, only a few miles from her house."
     vector = embed_single(text)
 
     print(f"Vector dimensions: {len(vector)} (expected 1536)")
@@ -28,15 +28,15 @@ def test_chunk_embedding():
            "chunk_index": 0,
            "doc_id": "sample.txt",
            "filename": "sample.txt",
-           "chunk_text": "Dave watched as the forest burned up on the hill.",
-           "char_count": 49, 
+           "chunk_text": "Professor Jay Ritter has collected data on U.S. IPOs since 1960.",
+           "char_count": 64, 
         },
         {
             "chunk_index": 1,
             "doc_id": "sample.txt",
             "filename": "sample.txt",
-            "chunk_text": "Marta was inside trying to round up the last of the pets.",
-            "char_count": 57,
+            "chunk_text": "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030",
+            "char_count": 75,
         },
     ]
     

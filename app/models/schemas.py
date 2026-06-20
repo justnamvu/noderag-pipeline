@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 
 class UploadResponse(BaseModel):  # what a successful upload returns
@@ -13,3 +14,23 @@ class UploadResponse(BaseModel):  # what a successful upload returns
 
 class ErrorResponse(BaseModel):  # what FastAPI returns on 400 or 422
     detail: str
+
+
+class QueryRequest(BaseModel):
+    query: str
+    top_k: int = 5
+
+
+class ChunkResult(BaseModel):
+    doc_id: str
+    filename: str
+    chunk_index: int
+    chunk_text: str
+    char_count: int
+    score: float
+
+
+class QueryResponse(BaseModel):
+    query: str
+    results: List[ChunkResult]
+    result_count: int

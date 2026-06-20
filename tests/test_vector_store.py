@@ -15,18 +15,18 @@ def test_store_chunks():
 
     mock_chunks = [
         {
-            "chunk_index": 0,
-            "doc_id": "test-store-001",
-            "filename": "test_store.txt",
-            "chunk_text": "The quarterly revenue increased significantly in Q3.",
-            "char_count": 51,
+           "chunk_index": 0,
+           "doc_id": "sample.txt",
+           "filename": "sample.txt",
+           "chunk_text": "Dave watched as the forest burned up on the hill,",
+           "char_count": 49, 
         },
         {
             "chunk_index": 1,
-            "doc_id": "test-store-001",
-            "filename": "test_store.txt",
-            "chunk_text": "Operating costs remained stable throughout the year.",
-            "char_count": 52,
+            "doc_id": "sample.txt",
+            "filename": "sample.txt",
+            "chunk_text": "He picked up the burnt end of the branch and made a mark on the stone.",
+            "char_count": 70,
         },
     ]
 
@@ -47,7 +47,7 @@ def test_verify_in_opensearch():
     index_name = settings.opensearch_index_name
 
 
-    result = client.get(index=index_name, id="test-store-001_0")
+    result = client.get(index=index_name, id="sample_0")
     source = result["_source"]
 
     print(f"doc_id: {source['doc_id']}")

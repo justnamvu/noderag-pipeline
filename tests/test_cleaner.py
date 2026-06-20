@@ -25,6 +25,6 @@ def test_cleaner_on_fixture(path: str, content_type: str):
     print(f"First 200 chars of cleaned text:\n{cleaned[:200]}")
 
 test_cleaner_on_string()
-test_cleaner_on_fixture("tests/fixtures/sample.txt",  "text/plain")
-test_cleaner_on_fixture("tests/fixtures/sample.pdf",  "application/pdf")
+test_cleaner_on_fixture("tests/fixtures/sample.txt", "text/plain")
+test_cleaner_on_fixture("tests/fixtures/sample.pdf", "application/pdf")
 test_cleaner_on_fixture("tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
