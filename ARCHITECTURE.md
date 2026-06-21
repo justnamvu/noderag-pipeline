@@ -5,8 +5,6 @@
 - Incoming documents are parsed, cleaned, and split into chunks by the Ingestion Service, which then converts them into vector embeddings and stores them alongside their metadata in a Vector Store. At query time, the user’s question is similarly vectorised and used to retrieve the most semantically relevant chunks via cosine similarity search. Those chunks are injected into a structured prompt and passed to an LLM, which produces a response grounded entirely in the retrieved context.
 - All client interactions flow through a single FastAPI-based API Gateway, which handles routing and validation across both the upload and query pipelines.
 
-
-
 ## Components
 1. **API Gateway:**
     - The single entry point for all client requests, whether that’s a document upload or a user query
@@ -28,7 +26,50 @@
 ## Data Flow Diagram
 ![Architecture Diagram](./docs/architecture_diagram.png)
 
-## Communication Schema
+## Ingestion Pipeline
+The upload endpoint runs the following sequence on every file:
+
+1. **Validation:** file type (MIME) and size check against config values
+2. **Parsing:** file bytes dispatched to the correct parser via 'PARSER_MAP' :
+    - PDF → 'docling' (exports to markdown, preserving structure)
+    - DOCX → 'python-docx' (extracts paragraphs, filters blank lines)
+    - TXT → 'bytes.decode()' with UTF-8 / Latin-1 fallback
+3. **Cleaning:** soft hyphens, non-breaking spaces, special characters, excess whitespace removed via 'clean_text()'
+4. **Chunking:** sliding window split with 'chunk_size=500', 'overlap=50'. Each chunk carries 'doc_id', 'file_name', 'chunk_index', and 'char_count' as metadata.
+
+Output: A list of chunk dictionaries ready to be passed to the Embeddings API
+
+## Embeddings & Retrieval
+### Embedding Model
+- Provider: OpenAI
+- Model: 'text-embedding-3-small'
+- Dimension: 1536
+
+### OpenSearch Index
+- Index name: 'noderag_vectors'
+- Algorithm: HNSW (Hierachival Navigable Small World)
+- Similarity metric: cosine similarity
+- Engine: nmslib
+
+### Storage
+Each chunk is stored as a seperate OpenSearch document with:
+- `embedding` - the 1536-dim vector
+- `doc_id`, `filename`, `chunk_index` - for tracing back to source
+- `chunk_text`, `char_count` - the actual content and its size
+
+Document ID format: `{doc_id}_{chunk_index}` - re-uploading a document overwrites its previous chunks rather than duplicating them.
+
+### Similarity Search
+`POST /api/v1/query` accepts `{"query": "...", "top_k": 5}`, embeds the query using the same model as ingestion, and runs a knn search against the index. Returns the top-K chunks ranked by cosine similarity score.
+
+### Baseline Chunk counts (fixture files)
+| File | Chunks stored |
+| :---: | :---: |
+| sample.txt | 7 |
+| sample.pdf | 7 |
+| sample.docx | 7 |
+
+## Planned Communication Schema
 1. **Upload request (Client → API Gateway → Ingestion Service):**
     ``` json
     {
@@ -85,20 +126,8 @@
     }
     ```
 
-## Ingestion Pipeline
-The upload endpoint runs the following sequence on every file:
-
-1. **Validation:** file type (MIME) and size chedk against config values
-2. **Parsing:** file bytes dispatched to the correct parser via 'PARSER_MAP' :
-    - PDF → 'docling' (exports to markdown, preserving structure)
-    - DOCX → 'python-docx' (extracts paragraphs, filters blank lines)
-    - TXT → 'bytes.decode()' with UTF-8 / Latin-1 fallback
-3. **Cleaning:** soft hyphens, non-breaking spaes, special characters, excess whitespae removed via 'clean_text()'
-4. **Chunking:** sliding window split with 'chunk_size=500', 'overlap=50'. Each chunk carries 'doc_id', 'file_name', 'chunk_index', and 'char_count' as metadata.
-
-Output: A list of chunk dictionaries ready to be passed to the Embeddings API
-
 ## Key Design Decisions
 - Schema between FastAPI and Vector DB finalised before coding begins
-- Metatdata stored alongside vector to enable filtered retrieval
-- LLM Service never receives raw documents - only pre-retrieved raw
+- Metadata stored alongside vector to enable filtered retrieval
+- LLM Service never receives raw documents - only pre-retrieved context
+- Query and chunk embeddings must come from the identical odel (text-embedding-3-small) - comparing vectors from different models would be meaningless
