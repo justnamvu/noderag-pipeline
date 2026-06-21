@@ -20,12 +20,18 @@ def get_openai_client() -> OpenAI:
 
 
 def embed_single(text: str) -> List[float]:
-    client = get_openai_client()
-    response = client.embeddings.create(
-        input=text,
-        model=settings.embeddings_model,
-    )
-    return response.data[0].embedding
+    try:
+        client = get_openai_client()
+        response = client.embeddings.create(
+            input=text,
+            model=settings.embeddings_model,
+        )
+        return response.data[0].embedding
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate embedding: {str(e)}",
+        )
 
 
 def embed_chunks(chunks: List[dict]) -> List[dict]:
