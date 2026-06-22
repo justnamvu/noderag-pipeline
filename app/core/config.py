@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     embeddings_api_key: str = ""
     embeddings_model: str = "text-embedding-3-small"
     llm_api_key: str = ""
-    llm_model_name: str = ""
+    llm_model_name: str = "gpt-5.4-nano"
     max_file_size_mb: int = 10
     allowed_file_types: str = "pdf,txt,docx"
 

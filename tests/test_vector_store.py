@@ -18,15 +18,15 @@ def test_store_chunks():
            "chunk_index": 0,
            "doc_id": "sample.txt",
            "filename": "sample.txt",
-           "chunk_text": "Dave watched as the forest burned up on the hill,",
-           "char_count": 49, 
+           "chunk_text": "Professor Jay Ritter has collected data on U.S. IPOs since 1960.",
+           "char_count": 64, 
         },
         {
             "chunk_index": 1,
             "doc_id": "sample.txt",
             "filename": "sample.txt",
-            "chunk_text": "He picked up the burnt end of the branch and made a mark on the stone.",
-            "char_count": 70,
+            "chunk_text": "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030",
+            "char_count": 75,
         },
     ]
 
