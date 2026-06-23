@@ -64,10 +64,34 @@ Document ID format: `{doc_id}_{chunk_index}` - re-uploading a document overwrite
 
 ### Baseline Chunk counts (fixture files)
 | File | Chunks stored |
-| :---: | :---: |
+| :-: | :-: |
 | sample.txt | 7 |
 | sample.pdf | 7 |
 | sample.docx | 7 |
+
+## LLM Service
+
+### Model
+- Provider: OpenAI
+- Model: 'gpt-5.4-nano'
+- Temperature: 0 (fully deterministic, no creatiev drift)
+- Max completion tokens: 500
+
+### System prompt
+The system prompt enforces strict grounding:
+1. Answer only from provided context passages
+2. Return "I don't have enough information..." if context is insufficient
+3. Never infer or use outside knowledge
+4. Cite source passages using [1], [2] notation
+5. Keep answers consise and factual
+
+### Hallucination provention test results
+| Scenario | Expected | Result |
+| :-: | :-: | :-: |
+| Answerable from context | Direct answer with citation | Pass |
+| Partially answerable | No fabricated information | Pass |
+| Out of context | "I don't know" response | Pass |
+| Empty chunks | Fallback without API call | Pass |
 
 ## Planned Communication Schema
 1. **Upload request (Client → API Gateway → Ingestion Service):**

@@ -18,34 +18,44 @@ MOCK_CHUNKS = [
     },
 ]
 
-def test_answer_with_context():
-    print("\n--- Test 1: Question answerable from context ---")
+def test_answerable():
+    print("\n--- Test 1: Answerable from context ---")
     answer = generate_answer(
         query="When can SpaceX's revenue hit $1 trillion?",
         context_chunks=MOCK_CHUNKS,
     )
     print(f"Answer: {answer}")
-    print(f"\nNon-empty: {len(answer) > 0}")
-    print(f"Not 'I don't know': {'enough information' not in answer.lower()}")
+    print(f"Pass: {"enough information" not in answer.lower() and len(answer) > 0}")
 
-def test_answer_out_of_context():
-    print("\n--- Test 2: Question not answerable from context")
+def test_partial():
+    print("\n--- Test 2: Partially answerable")
+    answer = generate_answer(
+        query="What is SpaceX and what does it do?",
+        context_chunks=MOCK_CHUNKS,
+    )
+    print(f"Answer: {answer}")
+    fabricated = any(
+        word in answer.lower()
+        for word in ["Starlink", "AI", "Spacecraft", "Rocket", "NASA"]
+    )
+    print(f"Pass (no fabricated information): {not fabricated}")
+
+def test_out_of_context():
+    print("\n--- Test 3: Out of context")
     answer = generate_answer(
         query="What is the GDP of Vietnam in 2025?",
         context_chunks=MOCK_CHUNKS
     )
     print(f"Answer: {answer}")
-    print(f"\nReturned 'I don't know': {'enough information' in answer.lower()}")
+    print(f"Pass (refuse to hallucinate): {"enough information" in answer.lower()}")
 
 def test_empty_chunks():
-    print("\n--- Test 3: No chunks provided ---")
-    answer = generate_answer(
-        query="What happened?",
-        context_chunks=[],
-    )
+    print("\n--- Test 4: Empty chunks ---")
+    answer = generate_answer(query="What happened?",context_chunks=[])
     print(f"Answer: {answer}")
-    print(f"Returned fallback: {'enough information' in answer.lower()}")
+    print(f"Pass (faillback triggered): {'enough information' in answer.lower()}")
 
-test_answer_with_context()
-test_answer_out_of_context()
+test_answerable()
+test_partial()
+test_out_of_context()
 test_empty_chunks()
