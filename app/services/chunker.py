@@ -39,16 +39,16 @@ def _attach_metadata(
     ]
 
 
-def log_chunk_stats(chunks: List[dict]) -> None:
-    if not chunks:
-        print("No chunks provided.")
-        return
+# def log_chunk_stats(chunks: List[dict]) -> None:
+#     if not chunks:
+#         print("No chunks provided.")
+#         return
 
-    lengths = [c["char_count"] for c in chunks]
-    print(f"Chunks produced: {len(chunks)}")
-    print(f"Min chunk length: {min(lengths)} chars")
-    print(f"Max chunk length: {max(lengths)} chars")
-    print(f"Avg chunk length: {sum(lengths) // len(lengths)} chars")
+#     lengths = [c["char_count"] for c in chunks]
+#     print(f"Chunks produced: {len(chunks)}")
+#     print(f"Min chunk length: {min(lengths)} chars")
+#     print(f"Max chunk length: {max(lengths)} chars")
+#     print(f"Avg chunk length: {sum(lengths) // len(lengths)} chars")
 
 
 def chunk_text(
@@ -63,5 +63,5 @@ def chunk_text(
 
     raw_chunks = _split_into_chunks(text, chunk_size, overlap)
     chunks = _attach_metadata(raw_chunks, doc_id, filename)
-    log_chunk_stats(chunks)
+    # log_chunk_stats(chunks)
     return chunks

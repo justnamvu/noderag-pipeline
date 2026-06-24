@@ -32,5 +32,6 @@ class ChunkResult(BaseModel):
 
 class QueryResponse(BaseModel):
     query: str
-    results: List[ChunkResult]
-    result_count: int
+    answer: str
+    sources: List[ChunkResult]
+    source_count: int

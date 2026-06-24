@@ -7,7 +7,7 @@ from app.services.embedder import embed_single, embed_chunks
 
 def test_single_embedding():
     print("\n--- Test 1: Single string embedding ---")
-    text = "Dave watched as the forest burned up on the hill, only a few miles from her house."
+    text = "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030"
     vector = embed_single(text)
 
     print(f"Vector dimensions: {len(vector)} (expected 1536)")

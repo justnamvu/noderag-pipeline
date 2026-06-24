@@ -7,7 +7,7 @@ from app.services.vector_store import search_chunks
 
 def test_search_basic():
     print("\n--- Test 1: Basic search ---")
-    results = search_chunks("What is SpaceX's ticker symbol on Nasdaq", top_k=3)
+    results = search_chunks("What is SpaceX's ticker symbol on Nasdaq?", top_k=3)
 
     print(f"Results returned: {len(results)}")
     for i, r in enumerate(results):
