@@ -41,6 +41,7 @@ The upload endpoint runs the following sequence on every file:
 Output: A list of chunk dictionaries ready to be passed to the Embeddings API
 
 ## Embeddings & Retrieval
+
 ### Embedding Model
 - Provider: OpenAI
 - Model: 'text-embedding-3-small'
@@ -69,6 +70,23 @@ Document ID format: `{doc_id}_{chunk_index}` - re-uploading a document overwrite
 | sample.txt | 7 |
 | sample.pdf | 7 |
 | sample.docx | 7 |
+
+## Retrieval Evaluation (precision@3)
+
+Evaluated against `sample.txt` with 5 hand-crafted question/chunk pairs.
+
+| Question | Expected Chunk Index | Top Index Returned | Score | Hit |
+| :-: | :-: | :-: | :-: | :-: |
+| What is SpaceX's ticker symbol on Nasdaq... | 0 | 0 | 0.7620 | Yes |
+| When could SpaceX’s revenue hit $1 trill... | 1 | 1 | 0.7463 | Yes |
+| Which professor has collected data on U.... | 2 | 2 | 0.6546 | Yes |
+| What has been the average one-year retur... | 3 | 3 | 0.8407 | Yes |
+| Do tech companies generally fare better ... | 4 | 4 | 0.6981 | Yes |
+
+
+Precision@3: X/5 = X%
+
+Chunk parameters: `chunk_size=500`, `overlap=50`
 
 ## LLM Service
 
