@@ -3,19 +3,24 @@
 run:
 	uvicorn app.main:app --reload
 
-format: # auto-format all code
+# auto-format all code
+format:
 	black app/
 
-lint: # check for style issues
+# check for style issues
+lint:
 	flake8 app/ 
 
-check: format lint # format then lint in one shot
+# format then lint in one shot
+check: format lint
 
 build:
 	docker-compose build
 
-up: # start all Docker services
+# start all Docker services
+up:
 	docker-compose up
 
-down: # stop all Docker services
+# stop all Docker services
+down:
 	docker-compose down

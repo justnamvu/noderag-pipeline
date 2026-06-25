@@ -17,7 +17,6 @@ def run_full_pipeline(filepath: str, content_type: str, query: str):
     print(f"Query: {query}")
     print(f"{'-'*50}")
     
-    # Ingest
     with open(filepath, "rb") as f:
         contents = f.read()
     
@@ -34,13 +33,11 @@ def run_full_pipeline(filepath: str, content_type: str, query: str):
 
     time.sleep(1)
 
-    # Retrieve
     results = search_chunks(query=query, top_k=3)
     print(f"Retrieved: {len(results)} chunks")
     print(f"Top result score: {results[0]['score']:.4f}")
-    print(f"Top result preview: {results[0]['chunk_text'][:120]}")
+    print(f"Top result preview: {results[0]['chunk_text'][:100]}")
 
-    # Generate
     answer = generate_answer(query=query, context_chunks=results)
     print(f"\nAnswer: {answer}")
 

@@ -5,8 +5,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from app.services.embedder import embed_single, embed_chunks
 
-def test_single_embedding():
-    print("\n--- Test 1: Single string embedding ---")
+def test_embed_single():
+    print("\n--- Test 1: Embed single string ---")
     text = "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030"
     vector = embed_single(text)
 
@@ -14,26 +14,26 @@ def test_single_embedding():
     print(f"Dimensions match: {len(vector) == 1536}")
 
     all_floats = all(isinstance(v, float) for v in vector)
-    print(f"All values floats: {all_floats}")
+    print(f"All values are floats: {all_floats}")
 
     in_range = all(-1.0 <= v <= 1.0 for v in vector)
-    print(f"All values in [-1, 1]: {in_range}")
+    print(f"All values are in [-1, 1]: {in_range}")
 
     print(f"Fist 5 values: {[round(v, 6) for v in vector[:5]]}")
 
-def test_chunk_embedding():
-    print("\n--- Test 2: embed_chunks with mock chunk dicts ---")
+def test_embed_chunks():
+    print("\n--- Test 2: Embed chunks ---")
     mock_chunks = [
         {
            "chunk_index": 0,
-           "doc_id": "sample.txt",
+           "doc_id": "test-doc-001",
            "filename": "sample.txt",
            "chunk_text": "Professor Jay Ritter has collected data on U.S. IPOs since 1960.",
            "char_count": 64, 
         },
         {
             "chunk_index": 1,
-            "doc_id": "sample.txt",
+            "doc_id": "test-doc-001",
             "filename": "sample.txt",
             "chunk_text": "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030",
             "char_count": 75,
@@ -48,10 +48,9 @@ def test_chunk_embedding():
     for chunk in embedded:
         has_embedding = "embedding" in chunk
         correct_dims = len(chunk["embedding"]) == 1536
-        print(f"    chunk {chunk["chunk_index"]}: "
-              f"has_embedding={has_embedding}, "
-              f"dims={len(chunk["embedding"])}, "
-              f"correct={correct_dims}")
+        print(f"Chunk {chunk["chunk_index"]}: "
+              f"has_embedding = {has_embedding}, "
+              f"correct_dims = {correct_dims}")
     
     original_untouched = "embedding" not in mock_chunks[0]
     print(f"Original chunks untouched: {original_untouched}")
@@ -61,6 +60,6 @@ def test_empty_input():
     result = embed_chunks([])
     print(f"Result for empty list: {result} (expected [])")
 
-test_single_embedding()
-test_chunk_embedding()
+test_embed_single()
+test_embed_chunks()
 test_empty_input()

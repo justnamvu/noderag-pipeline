@@ -1,7 +1,7 @@
 # NodeRAG Architecture
 
 ## Overview
-- NodeRAG is a Retrieval-Augmented Generation (RAG) system that enables users to upload documents and query them through a conversational AI Interface. Rather than relying on an LLM’s pre-trained knowledge, the system grounds every response strictly in the content of the uploaded documents.
+- NodeRAG is a Retrieval-Augmented Generation (RAG) system that enables users to upload documents and query them through a conversational AI interface. Rather than relying on an LLM’s pre-trained knowledge, the system grounds every response strictly in the content of the uploaded documents.
 - Incoming documents are parsed, cleaned, and split into chunks by the Ingestion Service, which then converts them into vector embeddings and stores them alongside their metadata in a Vector Store. At query time, the user’s question is similarly vectorised and used to retrieve the most semantically relevant chunks via cosine similarity search. Those chunks are injected into a structured prompt and passed to an LLM, which produces a response grounded entirely in the retrieved context.
 - All client interactions flow through a single FastAPI-based API Gateway, which handles routing and validation across both the upload and query pipelines.
 
@@ -11,15 +11,16 @@
     - Handle routing, authentication, and request validation before forwarding traffic to the appropriate internal service
     - Nothing reaches the backend without passing through it first
 2. **Ingestion Service:**
-    - Responsible for receiving raw documents, parsing them into plain text, and splitting that text into overlapping chunks suitable for embedding
-    - Handle all the messy pre-processing work: cleaning special characters, normalising whitespace, and producing a clean array of text chunks as output
+    - Receive raw docs, parse them into plain text, and split that text into overlapping chunks suitable for embedding
+    - Handle all the messy pre-processing work: clean special characters, normalise whitespace, and produce a clean array of text chunks as output
     - Downstream services never touch raw files and only receive what the ingestion service has prepared
 3. **Vector Store:**
-    - The database layer that persists vector embeddings alongside their metadata (filename, page number, chunk index)
+    - The database layer that persists vector embeddings alongside their metadata (filename, chunk index, etc.)
     - Expose similarity search capabilities so that at query time, the system can efficiently retrieve the top-K chunks most semantically relevant to a user’s question
     - Everything ingested lives here until explicitly deleted
 4. **LLM Service:**
-    - Wrap the language model and is responsible for taking a user query + the retrieved context chunks and producing a grounded natural-language answer
+    - Wrap the language model 
+    - Take a user query + the retrieved context chunks and produce a grounded natural-language answer
     - Enforce the strict prompting rules that prevent hallucination: if the answer isn’t in the provided context, it says no
     - The only component that generates text, whereas every other component moves or transforms data
 

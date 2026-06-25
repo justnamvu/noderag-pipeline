@@ -49,7 +49,7 @@ def embed_chunks(chunks: List[dict]) -> List[dict]:
             embedded.append(embedded_chunk)
 
             logger.info(
-                f"    Embedded chunk {i + 1}/{len(chunks)}    "
+                f"Embedded chunk {i + 1}/{len(chunks)} "
                 f"({chunk['char_count']} chars)"
             )
 

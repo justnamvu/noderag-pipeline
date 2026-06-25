@@ -5,16 +5,20 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from app.services.llm import generate_answer
 
-MOCK_CHUNKS = [
+mock_chunks = [
     {
         "chunk_index": 0,
+        "doc_id": "test-doc-001",
         "filename": "sample.txt",
         "chunk_text": "Professor Jay Ritter has collected data on U.S. IPOs since 1960.",
+        "char_count": 64, 
     },
     {
         "chunk_index": 1,
+        "doc_id": "test-doc-001",
         "filename": "sample.txt",
         "chunk_text": "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030",
+        "char_count": 75,
     },
 ]
 
@@ -22,7 +26,7 @@ def test_answerable():
     print("\n--- Test 1: Answerable from context ---")
     answer = generate_answer(
         query="When can SpaceX's revenue hit $1 trillion?",
-        context_chunks=MOCK_CHUNKS,
+        context_chunks=mock_chunks,
     )
     print(f"Answer: {answer}")
     print(f"Pass: {"enough information" not in answer.lower() and len(answer) > 0}")
@@ -31,7 +35,7 @@ def test_partial():
     print("\n--- Test 2: Partially answerable")
     answer = generate_answer(
         query="What is SpaceX and what does it do?",
-        context_chunks=MOCK_CHUNKS,
+        context_chunks=mock_chunks,
     )
     print(f"Answer: {answer}")
     fabricated = any(
@@ -44,7 +48,7 @@ def test_out_of_context():
     print("\n--- Test 3: Out of context")
     answer = generate_answer(
         query="What is the GDP of Vietnam in 2025?",
-        context_chunks=MOCK_CHUNKS
+        context_chunks=mock_chunks,
     )
     print(f"Answer: {answer}")
     print(f"Pass (refuse to hallucinate): {"enough information" in answer.lower()}")

@@ -32,7 +32,8 @@ def parse_txt(contents: bytes) -> str:
             return contents.decode("latin-1")
         except Exception as e:
             raise HTTPException(
-                status_code=422, detail=f"Failed to decode text file: {str(e)}"
+                status_code=422,
+                detail=f"Failed to decode text file: {str(e)}",
             )
 
 

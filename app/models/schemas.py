@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 
-class UploadResponse(BaseModel):  # what a successful upload returns
+class UploadResponse(BaseModel):
     doc_id: str
     filename: str
     content_type: str
@@ -12,7 +12,7 @@ class UploadResponse(BaseModel):  # what a successful upload returns
     message: str
 
 
-class ErrorResponse(BaseModel):  # what FastAPI returns on 400 or 422
+class ErrorResponse(BaseModel):
     detail: str
 
 

@@ -11,11 +11,11 @@ def test_file(path: str, content_type: str):
         contents = f.read()
     try:
         text = parse_document(contents, content_type)
-        print(f"Status: OK")
+        print(f"Status: Ok")
         print(f"Characters extracted: {len(text)}")
-        print(f"First 300 chars:\n{text[:300]}")
+        print(f"First 200 chars: {text[:200]}")
     except Exception as e:
-        print(f"Status: FAILED — {e}")
+        print(f"Status: Failed — {e}")
 
 test_file("tests/fixtures/sample.txt", "text/plain")
 test_file("tests/fixtures/sample.pdf", "application/pdf")

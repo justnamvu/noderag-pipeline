@@ -16,14 +16,14 @@ def test_store_chunks():
     mock_chunks = [
         {
            "chunk_index": 0,
-           "doc_id": "sample.txt",
+           "doc_id": "test-doc-001",
            "filename": "sample.txt",
            "chunk_text": "Professor Jay Ritter has collected data on U.S. IPOs since 1960.",
            "char_count": 64, 
         },
         {
             "chunk_index": 1,
-            "doc_id": "sample.txt",
+            "doc_id": "test-doc-001",
             "filename": "sample.txt",
             "chunk_text": "CEO Elon Musk even suggested SpaceX's revenue could hit $1 trillion by 2030",
             "char_count": 75,
@@ -38,7 +38,7 @@ def test_store_chunks():
     print(f"All stored: {stored == len(mock_chunks)}")
 
 
-def test_verify_in_opensearch():
+def test_verify_chunks_exist():
     print("\n--- Test 2: Verify chunks exist in OpenSearch ---")
 
     time.sleep(1)
@@ -47,20 +47,20 @@ def test_verify_in_opensearch():
     index_name = settings.opensearch_index_name
 
 
-    result = client.get(index=index_name, id="sample_0")
+    result = client.get(index=index_name, id="test-doc-001_0")
     source = result["_source"]
 
-    print(f"doc_id: {source['doc_id']}")
-    print(f"filename: {source['filename']}")
-    print(f"chunk_index: {source['chunk_index']}")
-    print(f"char_count: {source['char_count']}")
-    print(f"chunk_text: {source['chunk_text']}")
-    print(f"embedding dims: {len(source['embedding'])}")
-    print(f"embedding correct: {len(source['embedding']) == 1536}")
+    print(f"Document ID: {source['doc_id']}")
+    print(f"Filename: {source['filename']}")
+    print(f"Chunk index: {source['chunk_index']}")
+    print(f"Number of chars: {source['char_count']}")
+    print(f"Chunk text: {source['chunk_text']}")
+    print(f"Embedding dimensions: {len(source['embedding'])}")
+    print(f"Embedding correct: {len(source['embedding']) == 1536}")
 
 
 def test_count_documents():
-    print("\n--- Test 3: Document count in index ---")
+    print("\n--- Test 3: Count documents in index ---")
 
     time.sleep(1)
     client = get_client()
@@ -78,6 +78,6 @@ def test_empty_input():
 
 
 test_store_chunks()
-test_verify_in_opensearch()
+test_verify_chunks_exist()
 test_count_documents()
 test_empty_input()

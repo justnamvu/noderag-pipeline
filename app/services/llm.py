@@ -1,9 +1,7 @@
 import logging
 from typing import List
-
 from openai import OpenAI
 from fastapi import HTTPException
-
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -37,7 +35,7 @@ def _build_context_block(chunks: List[dict]) -> str:
     for i, chunk in enumerate(chunks, start=1):
         lines.append(
             f"[{i}] (file: {chunk['filename']}), "
-            f"chunk {chunk['chunk_index']}):\n{chunk['chunk_text']}"
+            f"chunk {chunk['chunk_index']}): {chunk['chunk_text']}"
         )
     return "\n\n".join(lines)
 

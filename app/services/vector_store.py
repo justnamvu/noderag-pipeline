@@ -37,7 +37,7 @@ def store_chunks(chunks: List[dict]) -> int:
                 body=body,
             )
             stored_count += 1
-            logger.info(f"  Stored chunk {chunk['chunk_text']}  " f"(id={doc_id})")
+            logger.info(f"Stored chunk {chunk['chunk_text']} (doc_id={doc_id})")
 
         except Exception as e:
             raise HTTPException(
