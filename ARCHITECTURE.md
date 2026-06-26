@@ -83,7 +83,6 @@ Evaluated against `sample.txt` with 5 hand-crafted question/chunk pairs.
 | What has been the average one-year retur... | 3 | 3 | 0.8407 | Yes |
 | Do tech companies generally fare better ... | 4 | 4 | 0.6981 | Yes |
 
-
 Precision@3: X/5 = X%
 
 Chunk parameters: `chunk_size=500`, `overlap=50`
@@ -93,24 +92,26 @@ Chunk parameters: `chunk_size=500`, `overlap=50`
 ### Model
 - Provider: OpenAI
 - Model: 'gpt-5.4-nano'
-- Temperature: 0 (fully deterministic, no creatiev drift)
+- Temperature: 0 (fully deterministic, no creative drift)
 - Max completion tokens: 500
 
-### System prompt
-The system prompt enforces strict grounding:
+### System Prompt Design
+The system prompt enforces strict grounding with five rules:
 1. Answer only from provided context passages
 2. Return "I don't have enough information..." if context is insufficient
 3. Never infer or use outside knowledge
 4. Cite source passages using [1], [2] notation
 5. Keep answers consise and factual
 
+
 ### Hallucination provention test results
-| Scenario | Expected | Result |
+| Scenario | Expected Behavior | Result |
 | :-: | :-: | :-: |
 | Answerable from context | Direct answer with citation | Pass |
 | Partially answerable | No fabricated information | Pass |
 | Out of context | "I don't know" response | Pass |
 | Empty chunks | Fallback without API call | Pass |
+| Empty query | 400 error raised | Pass |
 
 ## Planned Communication Schema
 1. **Upload request (Client → API Gateway → Ingestion Service):**
@@ -169,8 +170,53 @@ The system prompt enforces strict grounding:
     }
     ```
 
+## Current API Contracts
+
+### POST /api/v1/upload
+Request: `multipart/form-data` with a `file` field.
+Response:
+```json
+{
+    "doc_id": "uuid",
+    "filename": "report.pdf",
+    "content_type": "application/pdf",
+    "file_size_bytes": 84231,
+    "char_count": 7420,
+    "chunk_count": 14,
+    "message": "Pipeline complete. 14 chunks stored in OpenSearch."
+}
+```
+
+### POST /api/v1/query
+Request:
+```json
+{
+    "query": "What is SpaceX's ticker symbol on Nasdaq?",
+    "top_k": 5
+}
+```
+Response:
+```json
+{
+    "query": "What is SpaceX's ticker symbol on Nasdaq?",
+    "answer": "According to passage [1], SpaceX's ticker symbol on Nasdaq is SPCX",
+    "sources": [
+        {
+            "doc_id": "uuid",
+            "filename": "sample.txt",
+            "chunk_index": 0,
+            "chunk_text": "Space Exploration Technologies (NASDAQ: SPCX), better known as SpaceX, had a successful IPO...",
+            "char_count": 487,
+            "score": 0.8124,
+        }
+    ],
+    "source_count": 3
+}
+```
+
 ## Key Design Decisions
 - Schema between FastAPI and Vector DB finalised before coding begins
 - Metadata stored alongside vector to enable filtered retrieval
 - LLM Service never receives raw documents - only pre-retrieved context
 - Query and chunk embeddings must come from the identical odel (text-embedding-3-small) - comparing vectors from different models would be meaningless
+- `temperature=0` is non-negotiable for a RAG system - any temperature > 0 introduces randomness that can cause the model to drift from the provided context
