@@ -41,6 +41,9 @@ def _build_context_block(chunks: List[dict]) -> str:
 
 
 def generate_answer(query: str, context_chunks: List[dict]) -> str:
+    if not query.strip():
+        raise HTTPException(status_code=400, detail="Query cannot be empty.")
+
     if not context_chunks:
         return (
             "I don't have enough information in the provided "
@@ -74,7 +77,16 @@ def generate_answer(query: str, context_chunks: List[dict]) -> str:
             max_completion_tokens=500,
         )
         answer = response.choices[0].message.content.strip()
+
+        if not answer:
+            raise HTTPException(
+                status_code=500, detail="LLM returned an empty response."
+            )
+
         logger.info("Answer generated successfully.")
         return answer
+
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"LLM generation failed: {str(e)}")

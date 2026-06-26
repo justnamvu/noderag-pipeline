@@ -59,7 +59,17 @@ def test_empty_chunks():
     print(f"Answer: {answer}")
     print(f"Pass (faillback triggered): {'enough information' in answer.lower()}")
 
+def test_empty_query():
+    print("\n--- Test 5: Empty query ---")
+    try:
+        generate_answer(query= "   ", context_chunks=mock_chunks)
+        print("Fail (should have raised HTTPException)")
+    except Exception as e:
+        print(f"Correctly raised: {e}")
+        print("Pass")
+
 test_answerable()
 test_partial()
 test_out_of_context()
 test_empty_chunks()
+test_empty_query()
