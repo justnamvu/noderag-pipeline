@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from app.services.parser import parse_document
 
 def test_file(path: str, content_type: str):
-    print(f"\n--- Testing: {path} ---")
+    print(f"\n--- Test: Parse {path} ---")
     with open(path, "rb") as f:
         contents = f.read()
     try:

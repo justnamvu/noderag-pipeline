@@ -12,9 +12,9 @@ def test_search_basic():
     print(f"Number of results: {len(results)}")
     for i, result in enumerate(results):
         print(f"\nResult {i + 1} (score={result['score']:.4f}):")
-        print(f"    filename: {result['filename']}")
-        print(f"    chunk_index: {result['chunk_index']}")
-        print(f"    chunk_text: {result['chunk_text'][:150]}")
+        print(f"filename: {result['filename']}")
+        print(f"chunk_index: {result['chunk_index']}")
+        print(f"chunk_text: {result['chunk_text'][:150]}")
 
 def test_search_empty():
     print("\n--- Test 2: Search empty query ----")
@@ -22,7 +22,7 @@ def test_search_empty():
     print(f"Results for empty query: {len(results)} (expected 0)")
 
 def test_check_top_k():
-    print("\n--- Test 3: Check top_k limits")
+    print("\n--- Test 3: Check top_k limits ---")
     results = search_chunks("IPO", top_k=2)
     print(f"Requested top_k=2, got {len(results)} results")
     print(f"Within limit: {len(results) <= 2}")

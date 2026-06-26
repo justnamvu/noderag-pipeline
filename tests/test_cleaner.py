@@ -14,7 +14,7 @@ def test_clean_string():
     print(f"After: {repr(cleaned)}")
 
 def test_clean_file(path: str, content_type: str):
-    print(f"\n--- Test 2: Clean parsed file: {path} ---")
+    print(f"\n--- Test 2: Clean parsed file {path} ---")
     with open(path, "rb") as f:
         contents = f.read()
     raw = parse_document(contents, content_type)
