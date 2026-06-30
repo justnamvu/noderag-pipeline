@@ -103,7 +103,6 @@ The system prompt enforces strict grounding with five rules:
 4. Cite source passages using [1], [2] notation
 5. Keep answers consise and factual
 
-
 ### Hallucination provention test results
 | Scenario | Expected Behavior | Result |
 | :-: | :-: | :-: |
