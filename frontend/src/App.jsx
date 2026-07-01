@@ -1,4 +1,13 @@
+import { useState } from 'react'
+import UploadPanel from './components/UploadPanel'
+
 function App() {
+  const [uploadedDocs, setUploadedDocs] = useState([])
+
+  function handleDocumentUploaded(doc) {
+    setUploadedDocs(prev => [doc, ...prev])
+  }
+
   return (
     <div className="flex h-screen bg-white text-gray-900">
       {/* Sidebar */}
@@ -8,7 +17,7 @@ function App() {
         </div>
 
         <div className="flex-1 overflow-y-auto px-3 py-3">
-          <p className="text-xs text-gray-400 px-1">No documents yet</p>
+          <UploadPanel onDocumentUploaded={handleDocumentUploaded} />
         </div>
       </aside>
 
@@ -16,16 +25,24 @@ function App() {
       <main className="flex-1 flex flex-col">
         <div className="flex-1 overflow-y-auto px-6 py-6">
           <div className="h-full flex items-center justify-center">
-            <p className="text-sm text-gray-400">
-              Upload a document to get started
-            </p>
+            {uploadedDocs.length === 0 ? (
+              <p className="text-sm text-gray-400">
+                Upload a document to get started
+              </p>
+            ) : (
+              <p className="text-sm text-gray-400">
+                {uploadedDocs.length} document
+                {uploadedDocs.length !== 1 ? 's' : ''} ready — ask a question below
+              </p>
+            )}
           </div>
         </div>
-        
+
         <div className="border-t border-gray-200 px-6 py-4">
           <div className="max-w-2xl mx-auto">
-            <div className="flex items-center gap-2 border border-gray-300 rounded-xl px-4 py-3">
-              <input 
+            <div className="flex items-center gap-2 border border-gray-300
+                            rounded-xl px-4 py-3">
+              <input
                 type="text"
                 placeholder="Ask a question about your documents..."
                 className="flex-1 text-sm outline-none placeholder:text-gray-400"
