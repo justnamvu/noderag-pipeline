@@ -56,6 +56,6 @@ def test_edge_cases():
     print(f"Chunks from whitespace string: {len(result)} (expected 0)")
 
 test_edge_cases()
-test_chunk("tests/fixtures/sample.txt", "text/plain")
-test_chunk("tests/fixtures/sample.pdf", "application/pdf")
-test_chunk("tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+test_chunk("backend/tests/fixtures/sample.txt", "text/plain")
+test_chunk("backend/tests/fixtures/sample.pdf", "application/pdf")
+test_chunk("backend/tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")

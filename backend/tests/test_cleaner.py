@@ -25,6 +25,6 @@ def test_clean_file(path: str, content_type: str):
     print(f"First 200 chars of cleaned text: {cleaned[:200]}")
 
 test_clean_string()
-test_clean_file("tests/fixtures/sample.txt", "text/plain")
-test_clean_file("tests/fixtures/sample.pdf", "application/pdf")
-test_clean_file("tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+test_clean_file("backend/tests/fixtures/sample.txt", "text/plain")
+test_clean_file("backend/tests/fixtures/sample.pdf", "application/pdf")
+test_clean_file("backend/tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")

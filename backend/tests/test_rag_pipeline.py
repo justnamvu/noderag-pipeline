@@ -48,7 +48,7 @@ def run_full_pipeline(filepath: str, content_type: str, query: str):
     print("\nAll assertions passed.")
 
 run_full_pipeline(
-    filepath="tests/fixtures/sample.txt",
+    filepath="backend/tests/fixtures/sample.txt",
     content_type="text/plain",
     query="What is SpaceX's ticker symbol on Nasdaq?"
 )

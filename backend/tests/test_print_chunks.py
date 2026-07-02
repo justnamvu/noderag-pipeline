@@ -27,4 +27,4 @@ def print_chunks(filepath, content_type):
         )
         print(chunk['chunk_text'])
 
-print_chunks("tests/fixtures/sample.txt", "text/plain")
+print_chunks("backend/tests/fixtures/sample.txt", "text/plain")

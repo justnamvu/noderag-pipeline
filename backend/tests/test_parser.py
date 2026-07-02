@@ -17,6 +17,6 @@ def test_file(path: str, content_type: str):
     except Exception as e:
         print(f"Status: Failed — {e}")
 
-test_file("tests/fixtures/sample.txt", "text/plain")
-test_file("tests/fixtures/sample.pdf", "application/pdf")
-test_file("tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+test_file("backend/tests/fixtures/sample.txt", "text/plain")
+test_file("backend/tests/fixtures/sample.pdf", "application/pdf")
+test_file("backend/tests/fixtures/sample.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")

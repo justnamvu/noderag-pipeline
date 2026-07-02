@@ -5,11 +5,11 @@ run:
 
 # auto-format all code
 format:
-	black app/
+	black backend/app/
 
 # check for style issues
 lint:
-	flake8 app/ 
+	flake8 backend/app/ 
 
 # format then lint in one shot
 check: format lint
