@@ -26,8 +26,7 @@ without exception:
    to answer this question."
 3. Never infer, extrapolate, or use outside knowledge — even if you are
    confident about the answer.
-4. Cite which passage your answer draws from using [1], [2], etc.
-5. Keep answers concise and factual."""
+4. Keep answers concise and factual."""
 
 
 def _build_context_block(chunks: List[dict]) -> str:

@@ -13,7 +13,7 @@ eval_cases = [
         "expected_filename": "sample.txt",
     },
     {
-        "question": "When could SpaceX’s revenue hit $1 trillion?",
+        "question": "When could SpaceX's revenue hit $1 trillion?",
         "exp_chunk_index": 1,
         "expected_filename": "sample.txt",
     },

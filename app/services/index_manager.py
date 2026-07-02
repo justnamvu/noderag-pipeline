@@ -19,7 +19,7 @@ INDEX_MAPPING = {
                 "method": {
                     "name": "hnsw",
                     "space_type": "cosinesimil",
-                    "engine": "nmslib",
+                    "engine": "faiss",
                 },
             },
             "doc_id": {"type": "keyword"},

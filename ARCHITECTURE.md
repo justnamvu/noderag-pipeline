@@ -51,7 +51,7 @@ Output: A list of chunk dictionaries ready to be passed to the Embeddings API
 - Index name: 'noderag_vectors'
 - Algorithm: HNSW (Hierachival Navigable Small World)
 - Similarity metric: cosine similarity
-- Engine: nmslib
+- Engine: faiss
 
 ### Storage
 Each chunk is stored as a seperate OpenSearch document with:
@@ -100,8 +100,7 @@ The system prompt enforces strict grounding with five rules:
 1. Answer only from provided context passages
 2. Return "I don't have enough information..." if context is insufficient
 3. Never infer or use outside knowledge
-4. Cite source passages using [1], [2] notation
-5. Keep answers consise and factual
+4. Keep answers concise and factual
 
 ### Hallucination provention test results
 | Scenario | Expected Behavior | Result |
